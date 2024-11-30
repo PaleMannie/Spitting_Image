@@ -12,9 +12,11 @@ buildscript {
 plugins {
     id 'eclipse'
     id 'maven-publish'
+
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
+
 
 
 version = '1v-1.18.2'
@@ -103,7 +105,6 @@ jar {
         ])
     }
 }
-
 jar.finalizedBy('reobfJar')
 
 publishing {
