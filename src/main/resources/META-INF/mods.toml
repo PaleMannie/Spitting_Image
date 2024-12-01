@@ -6,10 +6,10 @@ modId="spittingimage" #mandatory
 version="1v-1.18.2" #mandatory
 displayName="Spitting Image" #mandatory
 logoFile="spittingimage.png" #optional
-credits="Thanks for this example mod goes to Java" #optional
+credits="Credit goes to Tabakmod" #optional
 authors="Pale Mannie/Manfred Blasser" #optional
 description='''
-Press S to spit on Grave
+Do you ever disliked something ingame so much that you had to spit at it?
 '''
 [[dependencies.spittingimage]] #optional
     modId="forge" #mandatory

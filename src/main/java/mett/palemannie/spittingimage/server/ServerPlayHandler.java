@@ -40,7 +40,6 @@ public class ServerPlayHandler {
         ///Particle
         Vec3 vec3 = player.getViewVector(1f);
         Vec3 MousePos = player.getEyePosition();
-        Vec3 LookAngle = player.getLookAngle();
 
         double x = player.getX() + vec3.x/4;
         double y = MousePos.y + vec3.y/4;
