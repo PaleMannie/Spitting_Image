@@ -3,6 +3,8 @@ package mett.palemannie.spittingimage;
 import mett.palemannie.spittingimage.net.ModMessages;
 import mett.palemannie.spittingimage.net.packets.SpitC2SPacket;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ClientRegistry;
@@ -11,9 +13,15 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(Dist.CLIENT)
 public class KeyBinding {
+    private static final Map<UUID, Long> cooldownMap = new HashMap<>();
+    private static final long COOLDOWN_TIME = 550;
 
     private static final KeyMapping SPIT_KEY = new KeyMapping("spittingimage.key.spit", GLFW.GLFW_KEY_COMMA, "key.categories.spittingimage");
 
@@ -25,9 +33,21 @@ public class KeyBinding {
     @SubscribeEvent
     public static void onKeyEvent(InputEvent.KeyInputEvent event)
     {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player == null) return;
+
+        LivingEntity player = minecraft.player;
+
+
         if(SPIT_KEY.consumeClick())
         {
-            ModMessages.sendToServer(new SpitC2SPacket());
+            UUID playerId = player.getUUID();
+            long currentTime = System.currentTimeMillis();
+
+            if (!cooldownMap.containsKey(playerId) || (currentTime - cooldownMap.get(playerId) >= COOLDOWN_TIME)){
+                ModMessages.sendToServer(new SpitC2SPacket());
+                cooldownMap.put(playerId, currentTime);
+            }
         }
     }
 }
