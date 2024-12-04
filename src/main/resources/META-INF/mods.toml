@@ -3,7 +3,7 @@ loaderVersion="[40,)" #mandatory This is typically bumped every Minecraft versio
 license="All rights reserved"
 [[mods]] #mandatory
 modId="spittingimage" #mandatory
-version="1v-1.18.2" #mandatory
+version="2v-1.18.2" #mandatory
 displayName="Spitting Image" #mandatory
 logoFile="spittingimage.png" #optional
 credits="Credit goes to Tabakmod" #optional

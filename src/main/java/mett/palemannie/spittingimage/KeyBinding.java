@@ -21,7 +21,7 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(Dist.CLIENT)
 public class KeyBinding {
     private static final Map<UUID, Long> cooldownMap = new HashMap<>();
-    private static final long COOLDOWN_TIME = 550;
+    private static final long COOLDOWN_TIME = 150;
 
     private static final KeyMapping SPIT_KEY = new KeyMapping("spittingimage.key.spit", GLFW.GLFW_KEY_COMMA, "key.categories.spittingimage");
 
