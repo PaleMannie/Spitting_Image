@@ -7,8 +7,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
@@ -27,11 +28,16 @@ public class KeyBinding {
 
     public static void setup()
     {
-        ClientRegistry.registerKeyBinding(SPIT_KEY);
+        MinecraftForge.EVENT_BUS.addListener(KeyBinding::onKeyEvent);
+    }
+
+    public static void registerKeys(RegisterKeyMappingsEvent evt)
+    {
+        evt.register(SPIT_KEY);
     }
 
     @SubscribeEvent
-    public static void onKeyEvent(InputEvent.KeyInputEvent event)
+    public static void onKeyEvent(InputEvent.Key event)
     {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null) return;

@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
-            DeferredRegister.create(ForgeRegistries.ENTITIES, SpittingImage.MODID);
+            DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SpittingImage.MODID);
 
     public static final RegistryObject<EntityType<SpitEntity>> SPIT =
             ENTITY_TYPES.register("spit", () -> EntityType.Builder.<SpitEntity>of(SpitEntity::new, MobCategory.MISC)
