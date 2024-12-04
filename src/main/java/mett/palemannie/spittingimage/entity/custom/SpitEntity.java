@@ -54,7 +54,7 @@ public class SpitEntity extends ThrowableItemProjectile {
     protected void onHitEntity(EntityHitResult pResult) {
         super.onHitEntity(pResult);
         Entity entity = pResult.getEntity();
-        entity.hurt(DamageSource.thrown(this, this.getOwner()), 1f);
+        entity.hurt(damageSources().thrown(this, this.getOwner()), 1f);
         if (!this.level.isClientSide) {
             this.level.broadcastEntityEvent(this, (byte) 3);
             this.discard();
