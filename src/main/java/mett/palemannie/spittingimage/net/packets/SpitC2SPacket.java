@@ -3,6 +3,7 @@ package mett.palemannie.spittingimage.net.packets;
 import mett.palemannie.spittingimage.server.ServerPlayHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -15,9 +16,9 @@ public class SpitC2SPacket {
     public void toBytes(FriendlyByteBuf buf){
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> supplier){
+    public boolean handle(Supplier<CustomPayloadEvent.Context> supplier){
 
-        NetworkEvent.Context context = supplier.get();
+        CustomPayloadEvent.Context context = supplier.get();
         context.enqueueWork(()-> {
 
             ServerPlayer player = context.getSender();
