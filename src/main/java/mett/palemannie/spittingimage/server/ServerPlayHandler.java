@@ -15,7 +15,7 @@ public class ServerPlayHandler {
 
     public static void handleSpitting(ServerPlayer player){
 
-        ServerLevel sevel = player.getLevel();
+        ServerLevel sevel = player.serverLevel();
         Random rdm = new Random();
 
         ///Entity
@@ -28,7 +28,7 @@ public class ServerPlayHandler {
         sevel.addFreshEntity(spit);
 
         ///Sound
-        Level lvl = player.level;
+        Level lvl = player.level();
 
         double posX = player.getX();
         double posY = player.getY();

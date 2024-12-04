@@ -26,7 +26,7 @@ public class ModMessages {
         net.messageBuilder(SpitC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(SpitC2SPacket::new)
                 .encoder(SpitC2SPacket::toBytes)
-                .consumer(SpitC2SPacket::handle)
+                .consumerMainThread(SpitC2SPacket::handle)
                 .add();
 
     }
