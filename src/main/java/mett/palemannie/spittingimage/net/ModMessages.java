@@ -12,7 +12,7 @@ public class ModMessages {
     }
     final static int version = 1;
 
-    private static final SimpleChannel INSTANCE = ChannelBuilder.named(new ResourceLocation(SpittingImage.MODID, "messages"))
+    private static final SimpleChannel INSTANCE = ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(SpittingImage.MODID, "messages"))
             .networkProtocolVersion(version)
             .clientAcceptedVersions(((status, version1) -> true))
             .serverAcceptedVersions(((status, version1) -> true))
