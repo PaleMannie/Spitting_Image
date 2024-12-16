@@ -21,8 +21,9 @@ public class SpitEntity extends ThrowableItemProjectile {
     public SpitEntity(Level pLevel) {
         super(ModEntities.SPIT.get(), pLevel);
     }
-    public SpitEntity(Level pLevel, LivingEntity pLivingEntity) {
-        super(ModEntities.SPIT.get(), pLivingEntity, pLevel);
+
+    public SpitEntity( Level pLevel, LivingEntity pLivingEntity) {
+        super(ModEntities.SPIT.get(), pLevel);
     }
 
     @Override
