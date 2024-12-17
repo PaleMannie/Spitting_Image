@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.BlockHitResult;
@@ -18,8 +19,15 @@ public class SpitEntity extends ThrowableItemProjectile {
     public SpitEntity(EntityType<? extends ThrowableItemProjectile> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
-    public SpitEntity(Level pLevel) {
-        super(ModEntities.SPIT.get(), pLevel);
+    public SpitEntity(Level pLevel, LivingEntity livingEntity, ItemStack stack) {
+        this(livingEntity.getX(), livingEntity.getEyeY() - 0.10000000149011612, livingEntity.getZ(), pLevel, stack);
+        this.setOwner(livingEntity);
+    }
+
+    public SpitEntity(double x, double y, double z, Level pLevel, ItemStack stack) {
+        super(ModEntities.SPIT.get(), x, y, z, pLevel, stack);
+        this.setItem(stack);
+
     }
 
     public SpitEntity( Level pLevel, LivingEntity pLivingEntity) {
