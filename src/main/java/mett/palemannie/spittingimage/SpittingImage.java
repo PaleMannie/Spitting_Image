@@ -51,8 +51,6 @@ public class SpittingImage
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        event.enqueueWork( ()-> {
-        ModMessages.register();
-    });
+        event.enqueueWork(ModMessages::register);
     }
 }

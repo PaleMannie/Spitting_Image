@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-     "layer0": "spittingimage:item/spit"
-   }
+    "layer0": "spittingimage:item/spit"
+  }
 }
