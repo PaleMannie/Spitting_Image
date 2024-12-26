@@ -9,7 +9,7 @@ logoFile="spittingimage.png" #optional
 credits="Credit goes to Tabakmod" #optional
 authors="Pale Mannie/Manfred Blasser" #optional
 description='''
-Do you ever disliked something ingame so much that you had to spit at it?
+Have you ever disliked something ingame so much that you had to spit at it?
 '''
 [[dependencies.spittingimage]] #optional
     modId="forge" #mandatory
