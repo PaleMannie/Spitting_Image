@@ -28,7 +28,6 @@ public class SpitEntity extends ThrowableItemProjectile {
     public SpitEntity(double x, double y, double z, Level pLevel, ItemStack stack) {
         super(ModEntities.SPIT.get(), x, y, z, pLevel, stack);
         this.setItem(stack);
-
     }
 
     public SpitEntity( Level pLevel, LivingEntity pLivingEntity) {
