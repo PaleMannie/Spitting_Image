@@ -8,7 +8,7 @@ import net.minecraft.world.damagesource.DamageType;
 
 public class ModDamageTypes {
 
-    public static final ResourceKey<DamageType> register(String name){
+    public static ResourceKey<DamageType> register(String name){
         return ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(SpittingImage.MODID, name));
     }
 
