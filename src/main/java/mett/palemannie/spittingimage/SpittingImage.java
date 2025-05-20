@@ -2,6 +2,7 @@ package mett.palemannie.spittingimage;
 
 import com.mojang.logging.LogUtils;
 import mett.palemannie.spittingimage.entity.ModEntities;
+import mett.palemannie.spittingimage.entity.client.SpitRenderer;
 import mett.palemannie.spittingimage.item.ModItems;
 import mett.palemannie.spittingimage.net.ModMessages;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -46,7 +47,7 @@ public class SpittingImage
     public void clientSetup(FMLClientSetupEvent e)
     {
         KeyBinding.setup();
-        EntityRenderers.register(ModEntities.SPIT.get(), ThrownItemRenderer::new);
+        EntityRenderers.register(ModEntities.SPIT.get(), SpitRenderer::new);
 
     }
 
