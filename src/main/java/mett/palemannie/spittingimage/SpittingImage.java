@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import mett.palemannie.spittingimage.entity.ModEntities;
 import mett.palemannie.spittingimage.entity.client.SpitRenderer;
 import mett.palemannie.spittingimage.net.ModMessages;
+import mett.palemannie.spittingimage.event.KeyBinding;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
