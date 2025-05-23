@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class SpitRenderer extends EntityRenderer<SpitEntity, LlamaSpitRenderState> {
 
-    private static final ResourceLocation ZIG_LOCATION = ResourceLocation.fromNamespaceAndPath(SpittingImage.MODID,"textures/entity/spit/spit.png");
+    private static final ResourceLocation SPIT_LOCATION = ResourceLocation.fromNamespaceAndPath(SpittingImage.MODID,"textures/entity/spit/spit.png");
     private final SpitModel model;
 
     public SpitRenderer(EntityRendererProvider.Context context) {
@@ -27,14 +27,13 @@ public class SpitRenderer extends EntityRenderer<SpitEntity, LlamaSpitRenderStat
 
         pPoseStack.pushPose();
 
-        pPoseStack.translate(0f, 0.3f, 0f);
+        pPoseStack.translate(0f, 0.1f, 0f);
 
         pPoseStack.mulPose(Axis.YP.rotationDegrees(pRenderState.yRot));
         pPoseStack.mulPose(Axis.XP.rotationDegrees(-pRenderState.xRot + 180f));
-        pPoseStack.mulPose(Axis.ZP.rotationDegrees(180f));
 
         this.model.setupAnim(pRenderState);
-        VertexConsumer vertexconsumer = pBufferSource.getBuffer(this.model.renderType(ZIG_LOCATION));
+        VertexConsumer vertexconsumer = pBufferSource.getBuffer(this.model.renderType(SPIT_LOCATION));
         this.model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
         pPoseStack.popPose();
         super.render(pRenderState, pPoseStack, pBufferSource, pPackedLight);
