@@ -73,14 +73,12 @@ public class SpitEntity extends Projectile {
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         super.onHitEntity(pResult);
-        //Entity entity = pResult.getEntity();
 
         Entity entity = this.getOwner();
 
-        if (entity instanceof Player player) {
+        if (entity instanceof Player) {
 
             entity = pResult.getEntity();
-            DamageSource damagesource = this.damageSources().spit(this, player);
             Level level = this.level();
 
             if (level instanceof ServerLevel serverlevel) {
@@ -88,12 +86,6 @@ public class SpitEntity extends Projectile {
                 entity.hurtServer(serverlevel, level.damageSources().source(ModDamageTypes.SPIT_DAMAGE), 1f);
             }
         }
-
-        /*entity.hurt(damageSources().source(ModDamageTypes.SPIT_DAMAGE, this.getOwner()), 1f);
-        if (!this.level().isClientSide) {
-            this.level().broadcastEntityEvent(this, (byte) 3);
-            this.discard();
-        }*/
     }
 
     @Override
