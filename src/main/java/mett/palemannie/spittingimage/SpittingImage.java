@@ -2,10 +2,10 @@ package mett.palemannie.spittingimage;
 
 import com.mojang.logging.LogUtils;
 import mett.palemannie.spittingimage.entity.ModEntities;
-import mett.palemannie.spittingimage.item.ModItems;
+import mett.palemannie.spittingimage.entity.client.SpitRenderer;
+import mett.palemannie.spittingimage.event.KeyBinding;
 import mett.palemannie.spittingimage.net.ModMessages;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -32,7 +32,6 @@ public class SpittingImage
         MinecraftForge.EVENT_BUS.register(this);
         eventBus.register(this);
         instance = this;
-        ModItems.register(eventBus);
         ModEntities.register(eventBus);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
         {
@@ -45,9 +44,9 @@ public class SpittingImage
     @OnlyIn(Dist.CLIENT)
     public void clientSetup(FMLClientSetupEvent e)
     {
-        KeyBinding.setup();
-        EntityRenderers.register(ModEntities.SPIT.get(), ThrownItemRenderer::new);
 
+        KeyBinding.setup();
+        EntityRenderers.register(ModEntities.SPIT.get(), SpitRenderer::new);
     }
 
     private void setup(final FMLCommonSetupEvent event) {

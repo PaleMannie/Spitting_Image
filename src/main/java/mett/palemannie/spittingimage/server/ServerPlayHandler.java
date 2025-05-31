@@ -1,7 +1,6 @@
 package mett.palemannie.spittingimage.server;
 
 import mett.palemannie.spittingimage.entity.custom.SpitEntity;
-import mett.palemannie.spittingimage.item.ModItems;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,9 +17,10 @@ public class ServerPlayHandler {
 
         ServerLevel sevel = player.serverLevel();
         Random rdm = new Random();
+        Level lvl = player.level();
 
         ///Entity
-        SpitEntity spit = new SpitEntity(sevel, player, ModItems.SPIT.get().getDefaultInstance());
+        SpitEntity spit = new SpitEntity(lvl, player);
         float re = (float)rdm.nextInt(4500,5000)/10000;
         float ye = player.getYRot();
         float xe = player.getXRot();
@@ -29,7 +29,6 @@ public class ServerPlayHandler {
         sevel.addFreshEntity(spit);
 
         ///Sound
-        Level lvl = player.level();
 
         double posX = player.getX();
         double posY = player.getY();

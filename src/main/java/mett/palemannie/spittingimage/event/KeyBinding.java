@@ -1,4 +1,4 @@
-package mett.palemannie.spittingimage;
+package mett.palemannie.spittingimage.event;
 
 import mett.palemannie.spittingimage.net.ModMessages;
 import mett.palemannie.spittingimage.net.packets.SpitC2SPacket;

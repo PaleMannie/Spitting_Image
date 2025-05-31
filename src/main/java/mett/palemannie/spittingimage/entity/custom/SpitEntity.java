@@ -1,52 +1,64 @@
 package mett.palemannie.spittingimage.entity.custom;
 
 import mett.palemannie.spittingimage.entity.ModEntities;
-import mett.palemannie.spittingimage.item.ModItems;
+import mett.palemannie.spittingimage.util.ModDamageTypes;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.ForgeEventFactory;
 
-public class SpitEntity extends ThrowableItemProjectile {
+public class SpitEntity extends Projectile {
 
-    public SpitEntity(EntityType<? extends ThrowableItemProjectile> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
-    }
-    public SpitEntity(Level pLevel, LivingEntity livingEntity, ItemStack stack) {
-        this(livingEntity.getX(), livingEntity.getEyeY() - 0.10000000149011612, livingEntity.getZ(), pLevel, stack);
-        this.setOwner(livingEntity);
+    public SpitEntity(EntityType<? extends Projectile> p_37248_, Level p_37249_) {
+        super(p_37248_, p_37249_);
     }
 
-    public SpitEntity(double x, double y, double z, Level pLevel, ItemStack stack) {
-        super(ModEntities.SPIT.get(), x, y, z, pLevel, stack);
-        this.setItem(stack);
-    }
-
-    public SpitEntity( Level pLevel, LivingEntity pLivingEntity) {
-        super(ModEntities.SPIT.get(), pLevel);
+    public SpitEntity(Level level, Player player){
+        this(ModEntities.SPIT.get(), level);
+        this.setOwner(player);
+        this.setPos(player.getX(), player.getEyeY()-0.2d, player.getZ());
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.isInWaterOrBubble()) {
+
+        HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
+        if (hitresult.getType() != HitResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, hitresult)) {
+            this.hitTargetOrDeflectSelf(hitresult);
+        }
+
+        Vec3 vec3 = this.getDeltaMovement();
+        double d0 = this.getX() + vec3.x;
+        double d1 = this.getY() + vec3.y;
+        double d2 = this.getZ() + vec3.z;
+        this.updateRotation();
+
+        if (this.isInLiquid()) {
             this.discard();
         } else if (this.level().getBlockStates(this.getBoundingBox()).noneMatch(BlockBehaviour.BlockStateBase::isAir)) {
             this.discard();
+        } else {
+            this.setDeltaMovement(vec3.scale(0.99f));
+            this.applyGravity();
+            this.setPos(d0, d1, d2);
         }
 
-        if (this.tickCount % 7 == 0) {
+        if (this.tickCount % 9 == 0) {
             level().addParticle(ParticleTypes.SPIT, this.getX(), this.getY() + 0.2, this.getZ(), 0d, 0d, 0d);
         }
-        level().addParticle(ParticleTypes.SPLASH, this.getX(), this.getY() + 0.2, this.getZ(), 0d, 0d, 0d);
     }
 
     @Override
@@ -61,17 +73,27 @@ public class SpitEntity extends ThrowableItemProjectile {
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         super.onHitEntity(pResult);
-        Entity entity = pResult.getEntity();
-        entity.hurt(damageSources().thrown(this, this.getOwner()), 1f);
-        if (!this.level().isClientSide) {
-            this.level().broadcastEntityEvent(this, (byte) 3);
-            this.discard();
+
+        Entity entity = this.getOwner();
+
+        if (entity instanceof Player) {
+
+            entity = pResult.getEntity();
+            Level level = this.level();
+
+            if (level instanceof ServerLevel serverlevel) {
+
+                entity.hurtServer(serverlevel, level.damageSources().source(ModDamageTypes.SPIT_DAMAGE), 1f);
+            }
         }
+        this.discard();
     }
 
     @Override
-    protected @NotNull Item getDefaultItem() {
-        return ModItems.SPIT.get();
-    }
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {}
 
+    @Override
+    protected double getDefaultGravity() {
+        return 0.05f;
+    }
 }
