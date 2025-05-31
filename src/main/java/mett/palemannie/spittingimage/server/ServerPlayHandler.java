@@ -17,18 +17,17 @@ public class ServerPlayHandler {
 
         ServerLevel sevel = player.serverLevel();
         Random rdm = new Random();
+        Level lvl = player.level();
 
         ///Entity
+        float speed = (float) rdm.nextInt(4500, 5000) / 10000f;
+        float inaccuracy = 1.0f;
+
         SpitEntity spit = new SpitEntity(sevel, player);
-        float re = (float)rdm.nextInt(4500,5000)/10000;
-        float ye = player.getYRot();
-        float xe = player.getXRot();
-        float ze = 0f;
-        spit.shootFromRotation(player, xe, ye, ze, re, 1f);
+        spit.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f, speed, inaccuracy);
         sevel.addFreshEntity(spit);
 
         ///Sound
-        Level lvl = player.level();
 
         double posX = player.getX();
         double posY = player.getY();
