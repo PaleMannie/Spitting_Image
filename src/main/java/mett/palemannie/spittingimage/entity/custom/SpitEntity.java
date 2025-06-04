@@ -4,6 +4,7 @@ import mett.palemannie.spittingimage.entity.ModEntities;
 import mett.palemannie.spittingimage.util.ModDamageTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
@@ -138,4 +139,18 @@ public class SpitEntity extends Projectile {
     protected void defineSynchedData() {}
 
     protected double gravity = -0.05d;
+
+    public void recreateFromPacket(ClientboundAddEntityPacket packet) {
+        super.recreateFromPacket(packet);
+        double d0 = packet.getXa();
+        double d1 = packet.getYa();
+        double d2 = packet.getZa();
+
+        for(int i = 0; i < 3; ++i) {
+            double d3 = 0.4 + 0.1 * (double)i;
+            this.level().addParticle(ParticleTypes.SPIT, this.getX(), this.getY(), this.getZ(), d0 * d3, d1, d2 * d3);
+        }
+
+        this.setDeltaMovement(d0, d1, d2);
+    }
 }
