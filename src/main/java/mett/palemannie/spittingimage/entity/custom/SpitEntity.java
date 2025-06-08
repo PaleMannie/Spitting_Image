@@ -87,6 +87,7 @@ public class SpitEntity extends Projectile {
                 entity.hurtServer(serverlevel, level.damageSources().source(ModDamageTypes.SPIT_DAMAGE), 1f);
             }
         }
+        this.discard();
     }
 
     @Override
