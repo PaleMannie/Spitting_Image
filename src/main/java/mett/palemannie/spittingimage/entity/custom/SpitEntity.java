@@ -2,11 +2,8 @@ package mett.palemannie.spittingimage.entity.custom;
 
 import mett.palemannie.spittingimage.entity.ModEntities;
 import mett.palemannie.spittingimage.util.ModDamageTypes;
-import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -95,7 +92,7 @@ public class SpitEntity extends Projectile {
 
                 Vec3 knockback = this.getDeltaMovement().normalize().scale(0.4);
                 entity.push(knockback.x, 0.4f, knockback.z);
-                pResult.getEntity().hurt(level.damageSources().source(ModDamageTypes.SPIT_DAMAGE), 1f);
+                pResult.getEntity().hurt(level.damageSources().source(ModDamageTypes.SPIT_DAMAGE, this.getOwner(), entity), 1f);
                 this.discard();
             }
 
