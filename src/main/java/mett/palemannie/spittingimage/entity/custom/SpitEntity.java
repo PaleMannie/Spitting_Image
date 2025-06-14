@@ -2,8 +2,13 @@ package mett.palemannie.spittingimage.entity.custom;
 
 import mett.palemannie.spittingimage.entity.ModEntities;
 import mett.palemannie.spittingimage.util.ModDamageTypes;
+import mett.palemannie.spittingimage.util.SpittingImageConfig;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.world.damagesource.CombatTracker;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -90,9 +95,17 @@ public class SpitEntity extends Projectile {
 
             if (entity instanceof LivingEntity livingentity && (livingentity.hurtTime == 0 || (player.isCreative() && livingentity.hurtTime == 0))) {
 
-                Vec3 knockback = this.getDeltaMovement().normalize().scale(0.4);
-                entity.push(knockback.x, 0.4f, knockback.z);
-                pResult.getEntity().hurt(level.damageSources().source(ModDamageTypes.SPIT_DAMAGE, this.getOwner(), entity), 1f);
+                Vec3 knockback = this.getDeltaMovement().normalize().scale(1/3f);
+                entity.push(knockback.x, 1/3f, knockback.z);
+
+                float damage = SpittingImageConfig.COMMON.spitDamage.get().floatValue();
+                DamageSource source = level.damageSources().source(ModDamageTypes.SPIT_DAMAGE, null, null);
+                DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
+
+                if(pResult.getEntity() != this.getOwner() ){ pResult.getEntity().hurt(source2, 0.000000001f); }
+                pResult.getEntity().hurt(source, damage);
+
+
                 this.discard();
             }
 
