@@ -5,6 +5,7 @@ import mett.palemannie.spittingimage.entity.ModEntities;
 import mett.palemannie.spittingimage.entity.client.SpitRenderer;
 import mett.palemannie.spittingimage.net.ModMessages;
 import mett.palemannie.spittingimage.event.KeyBinding;
+import mett.palemannie.spittingimage.util.SpittingImageConfig;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -12,7 +13,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -32,6 +35,8 @@ public class SpittingImage {
         MinecraftForge.EVENT_BUS.register(this);
         eventBus.register(this);
         instance = this;
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SpittingImageConfig.COMMON_SPEC);
         ModEntities.register(eventBus);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
         {

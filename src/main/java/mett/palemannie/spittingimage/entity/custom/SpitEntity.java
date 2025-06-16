@@ -2,11 +2,13 @@ package mett.palemannie.spittingimage.entity.custom;
 
 import mett.palemannie.spittingimage.entity.ModEntities;
 import mett.palemannie.spittingimage.util.ModDamageTypes;
+import mett.palemannie.spittingimage.util.SpittingImageConfig;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -84,7 +86,12 @@ public class SpitEntity extends Projectile {
 
             if (level instanceof ServerLevel serverlevel) {
 
-                entity.hurtServer(serverlevel, level.damageSources().source(ModDamageTypes.SPIT_DAMAGE), 1f);
+                float damage = SpittingImageConfig.COMMON.spitDamage.get().floatValue();
+                DamageSource source = level.damageSources().source(ModDamageTypes.SPIT_DAMAGE, null, null);
+                DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
+
+                if(entity != this.getOwner() ){ entity.hurtServer(serverlevel, source2, 0.000000001f); }
+                entity.hurtServer(serverlevel, source, damage);
             }
         }
         this.discard();
