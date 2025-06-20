@@ -11,9 +11,14 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.HangingEntity;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.decoration.Painting;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.BlockHitResult;
@@ -77,11 +82,11 @@ public class SpitEntity extends Projectile {
     protected void onHitEntity(EntityHitResult pResult) {
         super.onHitEntity(pResult);
 
-        Entity entity = this.getOwner();
+        Entity owner = this.getOwner();
 
-        if (entity instanceof Player) {
+        if (owner instanceof Player) {
 
-            entity = pResult.getEntity();
+            Entity entity = pResult.getEntity();
             Level level = this.level();
 
             if (level instanceof ServerLevel serverlevel) {
@@ -90,11 +95,46 @@ public class SpitEntity extends Projectile {
                 DamageSource source = level.damageSources().source(ModDamageTypes.SPIT_DAMAGE, null, null);
                 DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
 
-                if(entity != this.getOwner() ){ entity.hurtServer(serverlevel, source2, 0.000000001f); }
+                if (entity != this.getOwner()) {
+                    entity.hurtServer(serverlevel, source2, 0.000000001f);
+                }
                 entity.hurtServer(serverlevel, source, damage);
             }
+            if (level instanceof ServerLevel serverlevel) {
+
+                if (entity instanceof ItemFrame frame) {
+
+                    if (!frame.getItem().isEmpty()) {
+
+                        if (!frame.level().isClientSide()) {
+
+                            frame.level().addFreshEntity(new ItemEntity(
+                                    frame.level(),
+                                    frame.getX(),
+                                    frame.getY(),
+                                    frame.getZ(),
+                                    frame.getItem().copy()
+                            ));
+                        }
+
+                        frame.setItem(ItemStack.EMPTY);
+
+                    } else {
+
+                        this.discard();
+                        ((HangingEntity) entity).dropItem(serverlevel, entity);
+                        frame.kill(serverlevel);
+                    }
+                } else if (entity instanceof Painting) {
+
+                    this.discard();
+                    ((HangingEntity) entity).dropItem(serverlevel, entity);
+                    entity.kill(serverlevel);
+                }
+            }
+
+            this.discard();
         }
-        this.discard();
     }
 
     @Override

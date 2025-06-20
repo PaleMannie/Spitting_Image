@@ -4,15 +4,10 @@ import com.mojang.logging.LogUtils;
 import mett.palemannie.spittingimage.entity.ModEntities;
 import mett.palemannie.spittingimage.entity.client.SpitRenderer;
 import mett.palemannie.spittingimage.net.ModMessages;
-import mett.palemannie.spittingimage.event.KeyBinding;
 import mett.palemannie.spittingimage.util.SpittingImageConfig;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -28,32 +23,30 @@ public class SpittingImage {
     public static final String MODID = "spittingimage";
     public static SpittingImage instance;
 
-    public SpittingImage() {
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+    public SpittingImage(FMLJavaModLoadingContext context) {
+        /*IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);*/
 
-        MinecraftForge.EVENT_BUS.register(this);
-        eventBus.register(this);
-        instance = this;
+        var modBusGroup = context.getModBusGroup();
+        FMLCommonSetupEvent.getBus(modBusGroup).addListener(SpittingImage::commonSetup);
 
+        ModEntities.register(modBusGroup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SpittingImageConfig.COMMON_SPEC);
-        ModEntities.register(eventBus);
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-        {
-            eventBus.addListener(KeyBinding::registerKeys);
+
+    }
+
+    private static void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork( ()-> {
+            ModMessages.register();
         });
     }
 
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void clientSetup(FMLClientSetupEvent e)
-    {
-        KeyBinding.setup();
-        EntityRenderers.register(ModEntities.SPIT.get(), SpitRenderer::new);
+    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    public static class ClientModEvents {
+        @SubscribeEvent
+        public static void onClientSetup(FMLClientSetupEvent event) {
 
-    }
-
-    private void setup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(ModMessages::register);
+            EntityRenderers.register(ModEntities.SPIT.get(), SpitRenderer::new);
+        }
     }
 }

@@ -13,7 +13,7 @@ public class ServerPlayHandler {
 
     public static void handleSpitting(ServerPlayer player){
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.getServer().getLevel(player.getServer().overworld().dimension());
         Random rdm = new Random();
         Level lvl = player.level();
 
