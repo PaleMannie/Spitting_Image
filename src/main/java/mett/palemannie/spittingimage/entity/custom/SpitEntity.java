@@ -7,10 +7,12 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.decoration.Painting;
@@ -19,6 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.BlockHitResult;
@@ -91,50 +94,36 @@ public class SpitEntity extends Projectile {
 
             if (level instanceof ServerLevel serverlevel) {
 
-                float damage = SpittingImageConfig.COMMON.spitDamage.get().floatValue();
-                DamageSource source = level.damageSources().source(ModDamageTypes.SPIT_DAMAGE, null, null);
-                DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
+                if(entity instanceof ItemFrame frame){
 
-                if (entity != this.getOwner()) {
-                    entity.hurtServer(serverlevel, source2, 0.000000001f);
-                }
-                entity.hurtServer(serverlevel, source, damage);
-            }
-            if (level instanceof ServerLevel serverlevel) {
+                    if(!frame.getItem().isEmpty()){
 
-                if (entity instanceof ItemFrame frame) {
-
-                    if (!frame.getItem().isEmpty()) {
-
-                        if (!frame.level().isClientSide()) {
-
-                            frame.level().addFreshEntity(new ItemEntity(
-                                    frame.level(),
-                                    frame.getX(),
-                                    frame.getY(),
-                                    frame.getZ(),
-                                    frame.getItem().copy()
-                            ));
-                        }
-
+                        Containers.dropItemStack(serverlevel, frame.getX(), frame.getY(), frame.getZ(), frame.getItem().copy());
                         frame.setItem(ItemStack.EMPTY);
+                    }
+                    else {
 
-                    } else {
-
-                        this.discard();
-                        ((HangingEntity) entity).dropItem(serverlevel, entity);
+                        Containers.dropItemStack(serverlevel, frame.getX(), frame.getY(), frame.getZ(), new ItemStack(frame.getItem().getItem()));
+                        Containers.dropItemStack(serverlevel, frame.getX(), frame.getY(), frame.getZ(), new ItemStack(Items.ITEM_FRAME));
                         frame.kill(serverlevel);
                     }
-                } else if (entity instanceof Painting) {
+                } else if (entity instanceof Painting painting) {
 
                     this.discard();
-                    ((HangingEntity) entity).dropItem(serverlevel, entity);
-                    entity.kill(serverlevel);
+                    painting.dropItem(serverlevel, painting);
+                    painting.kill(serverlevel);
+                } else if (entity instanceof LivingEntity){
+
+                    float damage = SpittingImageConfig.COMMON.spitDamage.get().floatValue();
+                    DamageSource source = level.damageSources().source(ModDamageTypes.SPIT_DAMAGE, null, null);
+                    DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
+
+                    if(entity != this.getOwner() ){ entity.hurtServer(serverlevel, source2, 0.000000001f); }
+                    entity.hurtServer(serverlevel, source, damage);
                 }
             }
-
-            this.discard();
         }
+        this.discard();
     }
 
     @Override
