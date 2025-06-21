@@ -5,7 +5,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
 
-public class KeyBind {public static final String KEY_CATEGORY_TABAKMOD = "spittingimage.key.spit";
+public class KeyBind {public static final String KEY_CATEGORY_TABAKMOD = "key.category.spittingimage";
     public static final String KEY_SPITTING = "spittingimage.key.spit";
 
     public static final KeyMapping SPIT_KEY = new KeyMapping(KEY_SPITTING, KeyConflictContext.IN_GAME,
