@@ -13,6 +13,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.GlowItemFrame;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.entity.player.Player;
@@ -101,8 +102,15 @@ public class SpitEntity extends Projectile {
                     }
                     else {
 
-                        Containers.dropItemStack(serverlevel, frame.getX(), frame.getY(), frame.getZ(), new ItemStack(frame.getItem().getItem()));
-                        Containers.dropItemStack(serverlevel, frame.getX(), frame.getY(), frame.getZ(), new ItemStack(Items.ITEM_FRAME));
+                        if(frame instanceof GlowItemFrame){
+
+                            Containers.dropItemStack(serverlevel, frame.getX(), frame.getY(), frame.getZ(), new ItemStack(frame.getItem().getItem()));
+                            Containers.dropItemStack(serverlevel, frame.getX(), frame.getY(), frame.getZ(), new ItemStack(Items.GLOW_ITEM_FRAME));
+                        } else {
+
+                            Containers.dropItemStack(serverlevel, frame.getX(), frame.getY(), frame.getZ(), new ItemStack(frame.getItem().getItem()));
+                            Containers.dropItemStack(serverlevel, frame.getX(), frame.getY(), frame.getZ(), new ItemStack(Items.ITEM_FRAME));
+                        }
                         frame.kill(serverlevel);
                     }
                 } else if (entity instanceof Painting painting) {
