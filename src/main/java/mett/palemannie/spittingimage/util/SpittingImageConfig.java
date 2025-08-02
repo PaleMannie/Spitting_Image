@@ -16,6 +16,7 @@ public class SpittingImageConfig {
     public static class Common {
         public final ForgeConfigSpec.DoubleValue spitDamage;
         public final ForgeConfigSpec.BooleanValue spitModel;
+        public final ForgeConfigSpec.IntValue spitCooldown;
 
         public Common(ForgeConfigSpec.Builder builder) {
             builder.push("Spitting Image");
@@ -25,6 +26,8 @@ public class SpittingImageConfig {
                     .defineInRange("spitDamage", 1.0, 0.0, Float.MAX_VALUE);
 
             spitModel = builder.comment("Enables/Disables the player spit model").define("spitModel", true);
+
+            spitCooldown = builder.comment("Cooldown in ticks between spitting (20 ticks = 1 second)").defineInRange("spitCooldown", 3, 1, Integer.MAX_VALUE-1);
 
             builder.pop();
         }

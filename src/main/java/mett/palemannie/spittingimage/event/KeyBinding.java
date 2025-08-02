@@ -2,6 +2,7 @@ package mett.palemannie.spittingimage.event;
 
 import mett.palemannie.spittingimage.net.ModMessages;
 import mett.palemannie.spittingimage.net.packets.SpitC2SPacket;
+import mett.palemannie.spittingimage.util.SpittingImageConfig;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,7 +23,7 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(Dist.CLIENT)
 public class KeyBinding {
     private static final Map<UUID, Long> cooldownMap = new HashMap<>();
-    private static final long COOLDOWN_TIME = 150;
+    //long COOLDOWN_TIME = SpittingImageConfig.COMMON.spitCooldown.get()*50;
 
     private static final KeyMapping SPIT_KEY = new KeyMapping("spittingimage.key.spit", GLFW.GLFW_KEY_COMMA, "key.categories.spittingimage");
 
@@ -50,7 +51,7 @@ public class KeyBinding {
             UUID playerId = player.getUUID();
             long currentTime = System.currentTimeMillis();
 
-            if (!cooldownMap.containsKey(playerId) || (currentTime - cooldownMap.get(playerId) >= COOLDOWN_TIME)){
+            if (!cooldownMap.containsKey(playerId) || (currentTime - cooldownMap.get(playerId) >= SpittingImageConfig.COMMON.spitCooldown.get()*50)){
                 ModMessages.sendToServer(new SpitC2SPacket());
                 cooldownMap.put(playerId, currentTime);
             }

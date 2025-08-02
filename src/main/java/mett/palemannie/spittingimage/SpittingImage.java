@@ -29,6 +29,7 @@ public class SpittingImage
     public static SpittingImage instance;
 
     public SpittingImage() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SpittingImageConfig.COMMON_SPEC);
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
@@ -36,7 +37,6 @@ public class SpittingImage
         eventBus.register(this);
         instance = this;
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SpittingImageConfig.COMMON_SPEC);
         ModEntities.register(eventBus);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
         {
