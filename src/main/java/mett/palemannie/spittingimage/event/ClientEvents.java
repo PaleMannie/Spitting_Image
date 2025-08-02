@@ -4,6 +4,7 @@ import mett.palemannie.spittingimage.SpittingImage;
 import mett.palemannie.spittingimage.net.ModMessages;
 import mett.palemannie.spittingimage.net.packets.SpitC2SPacket;
 import mett.palemannie.spittingimage.util.KeyBind;
+import mett.palemannie.spittingimage.util.SpittingImageConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,7 +20,7 @@ import java.util.UUID;
 public class ClientEvents {
 
     private static final Map<UUID, Long> cooldownMap = new HashMap<>();
-    private static final long COOLDOWN_TIME = 150;
+    private static final long COOLDOWN_TIME = SpittingImageConfig.COMMON.spitCooldown.get()*50;
 
     @Mod.EventBusSubscriber(modid = SpittingImage.MODID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
