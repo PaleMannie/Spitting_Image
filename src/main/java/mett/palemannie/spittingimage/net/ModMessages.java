@@ -28,7 +28,6 @@ public class ModMessages {
                 .encoder(SpitC2SPacket::toBytes)
                 .consumerMainThread(SpitC2SPacket::handle)
                 .add();
-
     }
 
     public static <MSG> void sendToServer(MSG message){
