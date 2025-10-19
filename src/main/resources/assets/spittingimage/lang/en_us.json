@@ -1,6 +1,6 @@
 {
   "spittingimage.key.spit": "Spit",
-  "key.category.spittingimage": "Spitting Image",
+  "key.category.minecraft.spittingimage": "Spitting Image",
 
   "death.attack.spittingimage.spit_damage": "%1$s drowned in their own spit",
   "death.attack.spittingimage.spit_damage.player": "%2$s spat on %1$s with full intent",

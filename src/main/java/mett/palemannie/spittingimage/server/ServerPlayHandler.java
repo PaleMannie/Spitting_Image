@@ -1,7 +1,7 @@
 package mett.palemannie.spittingimage.server;
 
+import mett.palemannie.spittingimage.entity.client.ClientSpitData;
 import mett.palemannie.spittingimage.entity.custom.SpitEntity;
-import mett.palemannie.spittingimage.util.SpittingImageConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -17,11 +17,11 @@ import java.util.UUID;
 
 public class ServerPlayHandler {
 
-    private static final Map<UUID, Integer> spitCooldowns = new HashMap<>();
+    private static final Map<UUID, Long> spitCooldowns = new HashMap<>();
 
     public static void handleSpitting(ServerPlayer player) {
 
-        ServerLevel sevel = player.getServer().getLevel(player.getServer().overworld().dimension());
+        ServerLevel sevel = player.level();
         Random rdm = new Random();
         Level lvl = player.level();
 
@@ -30,17 +30,21 @@ public class ServerPlayHandler {
         double posZ = player.getZ();
         float r = 0.8f + lvl.random.nextFloat() * 0.3f;
 
-        int currentTick = player.level().getServer().getTickCount();
-        int cooldown = SpittingImageConfig.COMMON.spitCooldown.get(); // aus Forge Config
+        long currentTick = player.level().getGameTime();
+        long cooldown = ClientSpitData.getCooldown();
+        long lastUsed = spitCooldowns.getOrDefault(player.getUUID(), -cooldown - 1);
 
-        int lastUsed = spitCooldowns.getOrDefault(player.getUUID(), -cooldown - 1);
+        if (currentTick - lastUsed < cooldown) {
+
+            player.displayClientMessage(Component.translatable("spittingimage.spitcooldown").withStyle(ChatFormatting.RED), true);
+            return;
+        }
 
         if (currentTick - lastUsed >= cooldown) {
 
             ///Entity
             spitCooldowns.put(player.getUUID(), currentTick);
 
-            // Erlaubt: Spuck-Entity erzeugen
             float speed = (float) rdm.nextInt(4500, 5000) / 10000f;
             float inaccuracy = 1.0f;
 
@@ -51,9 +55,6 @@ public class ServerPlayHandler {
             ///Sound
             lvl.playSound(null, posX, posY, posZ, SoundEvents.LLAMA_SPIT, SoundSource.BLOCKS, 1f, r);
 
-        } else {
-
-            player.displayClientMessage(Component.translatable("spittingimage.spitcooldown").withStyle(ChatFormatting.RED), true);
         }
     }
 }

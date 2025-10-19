@@ -1,6 +1,8 @@
 package mett.palemannie.spittingimage.util;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class SpittingImageConfig {
@@ -14,23 +16,49 @@ public class SpittingImageConfig {
     }
 
     public static class Common {
-        public final ForgeConfigSpec.DoubleValue spitDamage;
         public final ForgeConfigSpec.BooleanValue spitModel;
-        public final ForgeConfigSpec.IntValue spitCooldown;
 
         public Common(ForgeConfigSpec.Builder builder) {
             builder.push("Spitting Image");
+
+            spitModel = builder.comment("Enables/Disables the player spit model").define("spitModel", true);
+
+            builder.pop();
+        }
+    }
+
+
+
+    public static final ForgeConfigSpec SERVER_SPEC;
+    public static final Server SERVER;
+
+    static {
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        SERVER = new Server(builder);
+        SERVER_SPEC = builder.build();
+    }
+
+    public static class Server {
+        public final ForgeConfigSpec.IntValue spitCooldown;
+        public final ForgeConfigSpec.DoubleValue spitDamage;
+
+        public Server(ForgeConfigSpec.Builder builder) {
+            builder.push("spitting");
 
             spitDamage = builder
                     .comment("How much damage the spit deals (default: 1.0)")
                     .defineInRange("spitDamage", 1.0, 0.0, Float.MAX_VALUE);
 
-            spitModel = builder.comment("Enables/Disables the player spit model").define("spitModel", true);
-
-            spitCooldown = builder.comment("Cooldown in ticks between spitting (20 ticks = 1 second)").
-                    defineInRange("spitCooldown", 3, 1, Integer.MAX_VALUE-1);
+            spitCooldown = builder
+                    .comment("Cooldown in ticks between spitting (20 ticks = 1 second)")
+                    .defineInRange("spitCooldown", 3, 1, Integer.MAX_VALUE - 1);
 
             builder.pop();
         }
+    }
+
+    public static void register() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_SPEC);
     }
 }

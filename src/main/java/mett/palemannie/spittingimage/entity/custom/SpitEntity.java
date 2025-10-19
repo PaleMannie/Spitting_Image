@@ -73,7 +73,7 @@ public class SpitEntity extends Projectile {
 
     @Override
     protected void onHitBlock(BlockHitResult pResult) {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte)3);
             this.discard();
         }
@@ -120,7 +120,7 @@ public class SpitEntity extends Projectile {
                     painting.kill(serverlevel);
                 } else if (entity instanceof LivingEntity){
 
-                    float damage = SpittingImageConfig.COMMON.spitDamage.get().floatValue();
+                    float damage = SpittingImageConfig.SERVER.spitDamage.get().floatValue();
                     DamageSource source = level.damageSources().source(ModDamageTypes.SPIT_DAMAGE, null, null);
                     DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
 
@@ -143,9 +143,9 @@ public class SpitEntity extends Projectile {
     @Override
     public void recreateFromPacket(ClientboundAddEntityPacket packet) {
         super.recreateFromPacket(packet);
-        double d0 = packet.getXa();
-        double d1 = packet.getYa();
-        double d2 = packet.getZa();
+        double d0 = packet.getMovement().x;
+        double d1 = packet.getMovement().y;
+        double d2 = packet.getMovement().z;
 
         for (int i = 0; i < 3; i++) {
             double d3 = 0.4 + 0.1 * i;

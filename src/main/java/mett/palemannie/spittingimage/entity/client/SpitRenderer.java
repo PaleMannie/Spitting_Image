@@ -1,15 +1,16 @@
 package mett.palemannie.spittingimage.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import mett.palemannie.spittingimage.SpittingImage;
 import mett.palemannie.spittingimage.entity.custom.SpitEntity;
 import mett.palemannie.spittingimage.util.SpittingImageConfig;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.LlamaSpitRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
@@ -23,22 +24,19 @@ public class SpitRenderer extends EntityRenderer<SpitEntity, LlamaSpitRenderStat
         this.model = new SpitModel(context.bakeLayer(SpitModel.LAYER_LOCATION));
     }
 
+    @Override
+    public void submit(LlamaSpitRenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
 
-    public void render(LlamaSpitRenderState pRenderState, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight) {
 
-        if(SpittingImageConfig.COMMON.spitModel.get()){
-            pPoseStack.pushPose();
+        if(SpittingImageConfig.COMMON.spitModel.get()) {
 
-            pPoseStack.translate(0f, 0.1f, 0f);
-
-            pPoseStack.mulPose(Axis.YP.rotationDegrees(pRenderState.yRot));
-            pPoseStack.mulPose(Axis.XP.rotationDegrees(-pRenderState.xRot + 180f));
-
-            this.model.setupAnim(pRenderState);
-            VertexConsumer vertexconsumer = pBufferSource.getBuffer(this.model.renderType(SPIT_LOCATION));
-            this.model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
-            pPoseStack.popPose();
-            super.render(pRenderState, pPoseStack, pBufferSource, pPackedLight);
+            poseStack.pushPose();
+            poseStack.translate(0.0F, 0.15F, 0.0F);
+            poseStack.mulPose(Axis.YP.rotationDegrees(renderState.yRot - 90.0F));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(renderState.xRot));
+            nodeCollector.submitModel(this.model, renderState, poseStack, this.model.renderType(SPIT_LOCATION), renderState.lightCoords, OverlayTexture.NO_OVERLAY, renderState.outlineColor, (ModelFeatureRenderer.CrumblingOverlay) null);
+            poseStack.popPose();
+            super.submit(renderState, poseStack, nodeCollector, cameraRenderState);
         }
     }
 
