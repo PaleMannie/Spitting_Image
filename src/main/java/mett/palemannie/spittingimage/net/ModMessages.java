@@ -3,7 +3,7 @@ package mett.palemannie.spittingimage.net;
 import mett.palemannie.spittingimage.SpittingImage;
 import mett.palemannie.spittingimage.net.packets.C2SSpitSpawnPacket;
 import mett.palemannie.spittingimage.net.packets.S2CSyncSpitCooldownPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.*;
 
@@ -14,7 +14,7 @@ public class ModMessages {
     }
     final static int version = 1;
 
-    public static final SimpleChannel INSTANCE = ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(SpittingImage.MODID, "messages"))
+    public static final SimpleChannel INSTANCE = ChannelBuilder.named(Identifier.fromNamespaceAndPath(SpittingImage.MODID, "messages"))
             .networkProtocolVersion(version)
             .clientAcceptedVersions(((status, version1) -> true))
             .serverAcceptedVersions(((status, version1) -> true))
