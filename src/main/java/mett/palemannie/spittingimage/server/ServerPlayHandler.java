@@ -28,7 +28,7 @@ public class ServerPlayHandler {
         double posX = player.getX();
         double posY = player.getY();
         double posZ = player.getZ();
-        float r = 0.8f + lvl.random.nextFloat() * 0.3f;
+        float r = 0.8f + lvl.getRandom().nextFloat() * 0.3f;
 
         long currentTick = player.level().getGameTime();
         long cooldown = ClientSpitData.getCooldown();
@@ -36,7 +36,7 @@ public class ServerPlayHandler {
 
         if (currentTick - lastUsed < cooldown) {
 
-            player.displayClientMessage(Component.translatable("spittingimage.spitcooldown").withStyle(ChatFormatting.RED), true);
+            player.sendSystemMessage(Component.translatable("spittingimage.spitcooldown").withStyle(ChatFormatting.RED), true);
             return;
         }
 
